@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "@/hooks/useAuth";
+import { AppNav } from "@/components/AppNav";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,11 +80,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "EliteBook Pro | Appointment Booking" },
+      {
+        name: "description",
+        content:
+          "Book appointments with trusted healthcare, salon, auto and home service providers in real time.",
+      },
+      { property: "og:title", content: "EliteBook Pro | Appointment Booking" },
+      {
+        property: "og:description",
+        content: "Real-time availability and instant confirmation for every service you book.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -119,8 +128,19 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <div className="flex min-h-screen flex-col">
+          <AppNav />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <footer className="border-t border-border py-6 text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} EliteBook Pro · Secure appointment management
+          </footer>
+        </div>
+        <Toaster position="top-center" richColors />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
