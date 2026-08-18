@@ -14,16 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          appointment_date: string
+          category: string
+          created_at: string
+          id: string
+          price: number
+          provider_id: string
+          service_name: string
+          status: string
+          time_slot: string
+          user_id: string
+        }
+        Insert: {
+          appointment_date: string
+          category?: string
+          created_at?: string
+          id?: string
+          price?: number
+          provider_id: string
+          service_name?: string
+          status?: string
+          time_slot: string
+          user_id: string
+        }
+        Update: {
+          appointment_date?: string
+          category?: string
+          created_at?: string
+          id?: string
+          price?: number
+          provider_id?: string
+          service_name?: string
+          status?: string
+          time_slot?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      providers: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          location: string
+          name: string
+          price: number
+          rating: number
+          reviews: number
+          service_id: string | null
+          slots: string[]
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id: string
+          location: string
+          name: string
+          price: number
+          rating?: number
+          reviews?: number
+          service_id?: string | null
+          slots?: string[]
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          price?: number
+          rating?: number
+          reviews?: number
+          service_id?: string | null
+          slots?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "providers_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          category: string
+          duration_minutes: number
+          icon: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category: string
+          duration_minutes?: number
+          icon?: string
+          id: string
+          name: string
+        }
+        Update: {
+          category?: string
+          duration_minutes?: number
+          icon?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "customer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +315,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "customer"],
+    },
   },
 } as const
